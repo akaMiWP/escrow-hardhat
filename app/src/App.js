@@ -91,24 +91,9 @@ function App() {
           <div className="card p-4">
             <h1 className="mb-4">Existing Contracts</h1>
             <div id="container">
-              {escrows.map((escrow) => (
-                <div key={escrow.address} className="card mb-3">
-                  <div className="card-body">
-                    <p className="card-text">
-                      <strong>Arbiter:</strong>{" "}
-                      <span className="text-break">{escrow.arbiter}</span>
-                    </p>
-                    <p className="card-text">
-                      <strong>Beneficiary:</strong>{" "}
-                      <span className="text-break">{escrow.beneficiary}</span>
-                    </p>
-                    <p className="card-text">
-                      <strong>Value:</strong> {escrow.value}
-                    </p>
-                    <button className="btn btn-warning">Approve</button>
-                  </div>
-                </div>
-              ))}
+              {escrows.map((escrow) => {
+                return <Escrow key={escrow.address} {...escrow} />;
+              })}
             </div>
           </div>
         </div>
