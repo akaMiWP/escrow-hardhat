@@ -1,7 +1,7 @@
-import { ethers } from 'ethers';
-import { useEffect, useState } from 'react';
-import deploy from './deploy';
-import Escrow from './Escrow';
+import { ethers } from "ethers";
+import { useEffect, useState } from "react";
+import deploy from "./deploy";
+import Escrow from "./Escrow";
 
 const provider = new ethers.providers.Web3Provider(window.ethereum);
 
@@ -17,7 +17,7 @@ function App() {
 
   useEffect(() => {
     async function getAccounts() {
-      const accounts = await provider.send('eth_requestAccounts', []);
+      const accounts = await provider.send("eth_requestAccounts", []);
 
       setAccount(accounts[0]);
       setSigner(provider.getSigner());
@@ -27,11 +27,10 @@ function App() {
   }, [account]);
 
   async function newContract() {
-    const beneficiary = document.getElementById('beneficiary').value;
-    const arbiter = document.getElementById('arbiter').value;
-    const value = ethers.BigNumber.from(document.getElementById('wei').value);
+    const beneficiary = document.getElementById("beneficiary").value;
+    const arbiter = document.getElementById("arbiter").value;
+    const value = ethers.BigNumber.from(document.getElementById("wei").value);
     const escrowContract = await deploy(signer, arbiter, beneficiary, value);
-
 
     const escrow = {
       address: escrowContract.address,
@@ -39,9 +38,9 @@ function App() {
       beneficiary,
       value: value.toString(),
       handleApprove: async () => {
-        escrowContract.on('Approved', () => {
+        escrowContract.on("Approved", () => {
           document.getElementById(escrowContract.address).className =
-            'complete';
+            "complete";
           document.getElementById(escrowContract.address).innerText =
             "✓ It's been approved!";
         });
@@ -54,47 +53,50 @@ function App() {
   }
 
   return (
-    <>
-      <div className="contract">
-        <h1> New Contract </h1>
-        <label>
-          Arbiter Address
-          <input type="text" id="arbiter" />
-        </label>
-
-        <label>
-          Beneficiary Address
-          <input type="text" id="beneficiary" />
-        </label>
-
-        <label>
-          Deposit Amount (in Wei)
-          <input type="text" id="wei" />
-        </label>
-
-        <div
-          className="button"
-          id="deploy"
-          onClick={(e) => {
-            e.preventDefault();
-
-            newContract();
-          }}
-        >
-          Deploy
+    <div className="container vh-100 d-flex align-items-center justify-content-center">
+      <div className="row w-100">
+        <div className="col-md-6">
+          <div className="card p-4">
+            <h1 className="mb-4">New Contract</h1>
+            <form>
+              <div className="form-group">
+                <label htmlFor="arbiter">Arbiter Address</label>
+                <input type="text" className="form-control" id="arbiter" />
+              </div>
+              <div className="form-group">
+                <label htmlFor="beneficiary">Beneficiary Address</label>
+                <input type="text" className="form-control" id="beneficiary" />
+              </div>
+              <div className="form-group">
+                <label htmlFor="wei">Deposit Amount (in Wei)</label>
+                <input type="text" className="form-control" id="wei" />
+              </div>
+              <button
+                type="button"
+                className="btn btn-primary mt-3"
+                id="deploy"
+                onClick={(e) => {
+                  e.preventDefault();
+                  newContract();
+                }}
+              >
+                Deploy
+              </button>
+            </form>
+          </div>
+        </div>
+        <div className="col-md-6">
+          <div className="card p-4">
+            <h1 className="mb-4">Existing Contracts</h1>
+            <div id="container">
+              {escrows.map((escrow) => (
+                <Escrow key={escrow.address} {...escrow} />
+              ))}
+            </div>
+          </div>
         </div>
       </div>
-
-      <div className="existing-contracts">
-        <h1> Existing Contracts </h1>
-
-        <div id="container">
-          {escrows.map((escrow) => {
-            return <Escrow key={escrow.address} {...escrow} />;
-          })}
-        </div>
-      </div>
-    </>
+    </div>
   );
 }
 
