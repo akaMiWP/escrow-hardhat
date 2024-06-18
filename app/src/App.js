@@ -29,7 +29,9 @@ function App() {
   async function newContract() {
     const beneficiary = document.getElementById("beneficiary").value;
     const arbiter = document.getElementById("arbiter").value;
-    const value = ethers.BigNumber.from(document.getElementById("wei").value);
+    const value = ethers.utils.parseEther(
+      document.getElementById("ether").value
+    );
     const escrowContract = await deploy(signer, arbiter, beneficiary, value);
 
     const escrow = {
@@ -68,8 +70,8 @@ function App() {
                 <input type="text" className="form-control" id="beneficiary" />
               </div>
               <div className="form-group">
-                <label htmlFor="wei">Deposit Amount (in Wei)</label>
-                <input type="text" className="form-control" id="wei" />
+                <label htmlFor="ether">Deposit Amount (in ether)</label>
+                <input type="text" className="form-control" id="ether" />
               </div>
               <button
                 type="button"
@@ -90,7 +92,22 @@ function App() {
             <h1 className="mb-4">Existing Contracts</h1>
             <div id="container">
               {escrows.map((escrow) => (
-                <Escrow key={escrow.address} {...escrow} />
+                <div key={escrow.address} className="card mb-3">
+                  <div className="card-body">
+                    <p className="card-text">
+                      <strong>Arbiter:</strong>{" "}
+                      <span className="text-break">{escrow.arbiter}</span>
+                    </p>
+                    <p className="card-text">
+                      <strong>Beneficiary:</strong>{" "}
+                      <span className="text-break">{escrow.beneficiary}</span>
+                    </p>
+                    <p className="card-text">
+                      <strong>Value:</strong> {escrow.value}
+                    </p>
+                    <button className="btn btn-warning">Approve</button>
+                  </div>
+                </div>
               ))}
             </div>
           </div>
