@@ -8,6 +8,7 @@ import SearchBox from "./SearchBox";
 const provider = new ethers.providers.Web3Provider(window.ethereum);
 
 export async function approve(escrowContract, signer) {
+  console.log("Approving...");
   const approveTxn = await escrowContract.connect(signer).approve();
   await approveTxn.wait();
   console.log("Approved event is sent");
@@ -74,7 +75,6 @@ function App() {
       arbiter,
       beneficiary,
       value: ethers.utils.formatEther(balance),
-      // value: "10000",
       handleApprove: async (statusRef) => {
         console.log("Setting up event listener for Approved event");
         escrowContract.on("Approved", () => {
@@ -84,6 +84,9 @@ function App() {
             statusRef.current.innerText = "✓ It's been approved!";
           }
         });
+
+        console.log("Calling approve function");
+        await approve(escrowContract, signer);
       },
     };
 
