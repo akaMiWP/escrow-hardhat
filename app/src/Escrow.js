@@ -13,6 +13,10 @@ export default function Escrow({
     <div key={address} className="card mb-3">
       <div className="card-body">
         <p className="card-text">
+          <strong>Contract Address:</strong>{" "}
+          <span className="text-break">{address}</span>
+        </p>
+        <p className="card-text">
           <strong>Arbiter:</strong>{" "}
           <span className="text-break">{arbiter}</span>
         </p>
