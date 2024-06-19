@@ -39,7 +39,7 @@ function App() {
       address: escrowContract.address,
       arbiter,
       beneficiary,
-      value: value.toString(),
+      value: ethers.utils.formatEther(value),
       handleApprove: async (statusRef) => {
         console.log("Setting up event listener for Approved event");
         escrowContract.on("Approved", () => {

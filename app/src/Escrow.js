@@ -21,7 +21,7 @@ export default function Escrow({
           <span className="text-break">{beneficiary}</span>
         </p>
         <p className="card-text">
-          <strong>Value:</strong> {value}
+          <strong>Value (in ether):</strong> {value}
         </p>
         <button
           ref={statusRef}
