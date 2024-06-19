@@ -1,5 +1,5 @@
 import { ethers } from "ethers";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import deploy from "./deploy";
 import Escrow from "./Escrow";
 
@@ -8,6 +8,7 @@ const provider = new ethers.providers.Web3Provider(window.ethereum);
 export async function approve(escrowContract, signer) {
   const approveTxn = await escrowContract.connect(signer).approve();
   await approveTxn.wait();
+  console.log("Approved event is sent");
 }
 
 function App() {
@@ -39,14 +40,17 @@ function App() {
       arbiter,
       beneficiary,
       value: value.toString(),
-      handleApprove: async () => {
+      handleApprove: async (statusRef) => {
+        console.log("Setting up event listener for Approved event");
         escrowContract.on("Approved", () => {
-          document.getElementById(escrowContract.address).className =
-            "complete";
-          document.getElementById(escrowContract.address).innerText =
-            "✓ It's been approved!";
+          console.log("Approved event is triggered");
+          if (statusRef.current) {
+            statusRef.current.className = "btn btn-secondary";
+            statusRef.current.innerText = "✓ It's been approved!";
+          }
         });
 
+        console.log("Calling approve function");
         await approve(escrowContract, signer);
       },
     };

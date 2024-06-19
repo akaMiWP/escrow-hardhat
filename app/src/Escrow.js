@@ -1,3 +1,5 @@
+import React, { useRef } from "react";
+
 export default function Escrow({
   address,
   arbiter,
@@ -5,6 +7,8 @@ export default function Escrow({
   value,
   handleApprove,
 }) {
+  const statusRef = useRef(null);
+
   return (
     <div key={address} className="card mb-3">
       <div className="card-body">
@@ -20,11 +24,11 @@ export default function Escrow({
           <strong>Value:</strong> {value}
         </p>
         <button
+          ref={statusRef}
           className="btn btn-warning"
           onClick={(e) => {
             e.preventDefault();
-
-            handleApprove();
+            handleApprove(statusRef);
           }}
         >
           Approve
